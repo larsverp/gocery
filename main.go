@@ -22,7 +22,16 @@ func main() {
 	fmt.Println("Welcome to Gocery, you're about to make your grocery shopping life a lot easier!")
 	for !databaseConnection {
 
-		fmt.Println("Please enter a SQL database URL: [127.0.0.1]")
+		fmt.Println("At the moment Gocery only supports MySQL databases, more are coming soon!")
+		fmt.Println("Select your database: [0]MySQL")
+		var databaseChoice int = 0
+		fmt.Scanln(&databaseChoice)
+		for databaseChoice != 0 {
+			fmt.Println("Please enter a valid database type: [0]MySQL [1]Postgres")
+			fmt.Scanln(&databaseChoice)
+		}
+
+		fmt.Println("Please enter a database URL: [127.0.0.1]")
 		fmt.Scanln(&databaseURL)
 		if databaseURL == "" {
 			databaseURL = "127.0.0.1"
@@ -49,20 +58,11 @@ func main() {
 			databaseName = "gocery"
 		}
 
-		fmt.Println("Select your database: [0]MySQL [1]Postgres")
-		var databaseChoice int = 2
-		fmt.Scanln(&databaseChoice)
-		for databaseChoice != 0 && databaseChoice != 1 {
-			fmt.Println("Please enter a valid database type: [0]MySQL [1]Postgres")
-			fmt.Scanln(&databaseChoice)
-		}
-
 		databaseURL = databaseUser + ":" + databasePassword + "@tcp(" + databaseURL + ":" + databasePort + ")/" + databaseName
 
+		// More database types should be added in the future
 		if databaseChoice == 0 {
 			databaseType = "mysql"
-		} else {
-			databaseType = "postgres"
 		}
 
 		fmt.Println("Attempting to connect to DB...")
@@ -79,7 +79,7 @@ func main() {
 
 	startMigration(*db)
 
-	//startWebServer()
+	startWebServer()
 }
 
 func startMigration(db sql.DB) {
