@@ -29,6 +29,9 @@ func (p *Product) Subtract(amount int) {
 		fmt.Println("Error updating product: ", err)
 	}
 	p.Count -= amount
+	if p.Count < p.Min_amount {
+		user.client.AddToCart(p.Id, (p.Min_amount - p.Count))
+	}
 
 }
 
